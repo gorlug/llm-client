@@ -6,12 +6,14 @@ import { type FunctionJSONSchema } from '../text/functions.js';
 
 import { parse, type ParsedField } from './parser.js';
 
+export type FieldName = 'string' | 'number' | 'boolean' | 'json'
+
 export interface Field {
   name: string;
   title?: string;
   description?: string;
   type?: {
-    name: 'string' | 'number' | 'boolean' | 'json'; // extend this as needed
+    name: FieldName; // extend this as needed
     isArray: boolean;
   };
   isOptional?: boolean;

@@ -64,6 +64,16 @@ export function normalizeText(s: string): string {
  * @returns A boolean indicating if the prediction exactly matches the ground truth.
  */
 export function emScore(prediction: string, groundTruth: string): boolean {
+  if (typeof groundTruth === 'object')   {
+    let equals = true
+    for (const key in Object.keys(groundTruth)) {
+      if (prediction[key] === undefined) {
+        return false
+      }
+      equals = equals && emScore(prediction[key]!, groundTruth[key])
+      return equals
+    }
+  }
   return normalizeText(prediction) === normalizeText(groundTruth);
 }
 

@@ -5,7 +5,7 @@ import type { AIMemory, AIService } from '../text/types.js';
 import type { Tracer } from '../trace/index.js';
 
 import { InstanceRegistry } from './registry.js';
-import { type Field } from './sig.js';
+import { type Field, type FieldName } from './sig.js'
 
 export type Value = string | string[] | number | boolean | object;
 
@@ -128,7 +128,7 @@ export const validateValue = (
   const ft = field.type ?? { name: 'string', isArray: false };
 
   const validateSingleValue = (
-    expectedType: string,
+    expectedType: FieldName,
     val: Readonly<Value>
   ): boolean => {
     switch (expectedType) {
@@ -138,6 +138,8 @@ export const validateValue = (
         return typeof val === 'number';
       case 'boolean':
         return typeof val === 'boolean';
+      case 'json':
+        return typeof val === 'object';
       default:
         return false; // Unknown or unsupported type
     }
