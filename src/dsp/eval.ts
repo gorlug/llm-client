@@ -63,18 +63,21 @@ export function normalizeText(s: string): string {
  * @param groundTruth The actual correct text.
  * @returns A boolean indicating if the prediction exactly matches the ground truth.
  */
-export function emScore(prediction: string, groundTruth: string): boolean {
+export function emScore(prediction: unknown, groundTruth: unknown): boolean {
   if (typeof groundTruth === 'object')   {
+    const groundTruthObject = groundTruth as Record<string, string>
+    const predictionObject = prediction as Record<string, string>
     let equals = true
-    for (const key in Object.keys(groundTruth)) {
-      if (prediction[key] === undefined) {
+    for (const key of Object.keys(groundTruthObject)) {
+      if (predictionObject[key] === undefined) {
         return false
       }
-      equals = equals && emScore(prediction[key]!, groundTruth[key])
+      equals = equals && emScore(predictionObject[key]!, groundTruthObject[key]!)
       return equals
     }
   }
-  return normalizeText(prediction) === normalizeText(groundTruth);
+  return normalizeText(`${prediction}`) === normalizeText(`${groundTruth}`);
+
 }
 
 /**
@@ -88,9 +91,26 @@ export function emScore(prediction: string, groundTruth: string): boolean {
  * @param groundTruth The actual correct text.
  * @returns The F1 score as a number.
  */
-export function f1Score(prediction: string, groundTruth: string): number {
-  const predictionTokens = normalizeText(prediction).split(' ');
-  const groundTruthTokens = normalizeText(groundTruth).split(' ');
+export function f1Score(prediction: unknown, groundTruth: unknown): number {
+  console.log('prediction', prediction)
+  console.log('groundTruth', groundTruth)
+  if (typeof groundTruth === 'object')   {
+    const groundTruthObject = groundTruth as Record<string, string>
+    const predictionObject = prediction as Record<string, string>
+    let score = 0
+    for (const key of Object.keys(groundTruthObject)) {
+      if (predictionObject[key] === undefined) {
+        return 0
+      }
+      const scoreOfKey = f1Score(predictionObject[key]!, groundTruthObject[key]!)
+      console.log('scoreOfKey', scoreOfKey, key)
+      score += scoreOfKey
+      console.log('inner score', score)
+    }
+    return score
+  }
+  const predictionTokens = normalizeText(`${prediction}`).split(' ');
+  const groundTruthTokens = normalizeText(`${groundTruth}`).split(' ');
 
   // Calculate the intersection of common tokens between prediction and ground truth
   const predictionCounts = countTokens(predictionTokens);
