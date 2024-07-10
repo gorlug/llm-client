@@ -75,7 +75,9 @@ export class AxBootstrapFewShot<
 
       const res = await this.program.forward(ex as IN, aiOpt);
       const success = metricFn({ prediction: res, example: ex });
+      console.log('bbq optimize success???', success, metricFn)
       if (success) {
+        console.log('jo success')
         this.traces = [...this.traces, ...this.program.getTraces()];
       }
 

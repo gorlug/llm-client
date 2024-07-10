@@ -44,7 +44,8 @@
     "node": ">=21"
   },
   "dependencies": {
-    "json5": "^2.2.3"
+    "json5": "^2.2.3",
+    "ts-node": "^10.9.2"
   },
   "devDependencies": {
     "@ava/typescript": "^5.0.0",

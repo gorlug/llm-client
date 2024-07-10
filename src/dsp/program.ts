@@ -119,6 +119,7 @@ export class AxProgram<IN extends AxGenIn, OUT extends AxGenOut>
   public getTraces(): AxProgramTrace[] {
     let traces: AxProgramTrace[] = [];
 
+    console.log('get traces', this.key, this.trace, this.reg);
     if (this.trace) {
       traces.push({
         trace: this.trace,
@@ -131,6 +132,7 @@ export class AxProgram<IN extends AxGenIn, OUT extends AxGenOut>
       const _traces = inst.getTraces();
       traces = [...traces, ..._traces];
     }
+    console.log('returning traces', traces)
     return traces;
   }
 

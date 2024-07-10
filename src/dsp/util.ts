@@ -44,6 +44,13 @@ export const validateValue = (
         return typeof val === 'number';
       case 'boolean':
         return typeof val === 'boolean';
+      case 'json':
+        try {
+          JSON.parse(JSON.stringify(val));
+          return true;
+        } catch (e) {
+          return false;
+        }
       default:
         return false; // Unknown or unsupported type
     }
